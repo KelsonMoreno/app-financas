@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>App de Finanças</title>
+  
+  <!-- Manifesto e ícone PWA -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="theme-color" content="#00b894">
+
+  <!-- Fontes e Chart.js -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to right, #dff9fb, #f6e58d);
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 2rem;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    .form-section, .output-section {
+      flex: 1 1 400px;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #2f3640;
+    }
+    form {
+      margin-bottom: 2rem;
+    }
+    .input-group {
+      margin-bottom: 1.2rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+      color: #2d3436;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    button {
+      width: 100%;
+      padding: 0.9rem;
+      background: #00b894;
+      color: white;
+      border: none;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #019875;
+    }
+    #resumo, #historico {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-top: 1rem;
+      border: 1px solid #dfe6e9;
+    }
+    .item {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #dcdde1;
+    }
+    .item:last-child {
+      border-bottom: none;
+    }
+    .grafico-container {
+      margin-top: 2rem;
+    }
+    .filtros {
+      margin-bottom: 1rem;
+    }
+    .acao-btn {
+      margin-top: 0.5rem;
+      display: inline-block;
+      margin-right: 0.5rem;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.9rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .editar-btn {
+      background: #0984e3;
+      color: white;
+      border: none;
+    }
+    .remover-btn {
+      background: #d63031;
+      color: white;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-section">
+      <h1>Controle de Finanças</h1>
+      <form id="finance-form">
+        <div class="input-group">
+          <label for="tipo">Tipo:</label>
+          <select id="tipo">
+            <option value="salario">Salário</option>
+            <option value="divida">Dívida</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="valor">Valor:</label>
+          <input type="number" id="valor" placeholder="Ex: 1500.00" required>
+        </div>
+        <div class="input-group">
+          <label for="mes">Mês:</label>
+          <input type="month" id="mes" required>
+        </div>
+        <div class="input-group">
+          <label for="descricao">Descrição:</label>
+          <input type="text" id="descricao" placeholder="Ex: Conta de Luz, Salário CLT">
+        </div>
+        <div class="input-group" id="grupo-meta" style="display:none">
+          <label for="meta">Meta de Gasto:</label>
+          <input type="number" id="meta" placeholder="Ex: 500.00">
+        </div>
+        <div class="input-group" id="grupo-vencimento" style="display:none">
+          <label for="vencimento">Data de Vencimento:</label>
+          <input type="date" id="vencimento">
+        </div>
+        <button type="submit">Adicionar</button>
+      </form>
+
+      <div class="filtros">
+        <label for="filtroMes">Filtrar por mês:</label>
+        <input type="month" id="filtroMes">
+      </div>
+
+      <h2>Resumo Mensal</h2>
+      <div id="resumo"></div>
+
+      <h2>Histórico</h2>
+      <div id="historico"></div>
+    </div>
+
+    <div class="output-section">
+      <h2>Gráfico</h2>
+      <div class="grafico-container">
+        <canvas id="graficoFinanceiro" width="400" height="400"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seu JS principal -->
+  <script src="script.js"></script>
+
+  <!-- Registro do Service Worker -->
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js").then(() => {
+        console.log("Service Worker registrado com sucesso!");
+      }).catch(error => {
+        console.error("Erro ao registrar o Service Worker:", error);
+      });
+    }
+  </script>
+</body>
+</html>
